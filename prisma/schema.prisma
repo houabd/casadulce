@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Category {
+  id       Int               @id @default(autoincrement())
+  name     String
+  icon     String?
+  order    Int               @default(0)
+  products ProductCategory[]
+}
+
+model Product {
+  id          Int               @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  images      String[]
+  available   Boolean           @default(true)
+  isNew       Boolean           @default(false)
+  isPopular   Boolean           @default(false)
+  supplements Supplement[]
+  categories  ProductCategory[]
+  orderItems  OrderItem[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model Supplement {
+  id        Int     @id @default(autoincrement())
+  name      String
+  price     Float
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductCategory {
+  productId  Int
+  categoryId Int
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([productId, categoryId])
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  phone     String?
+  password  String
+  orders    Order[]
+  createdAt DateTime @default(now())
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id           Int         @id @default(autoincrement())
+  number       String      @unique
+  customerName String
+  phone        String
+  mode         OrderMode
+  address      String?
+  status       OrderStatus @default(NOUVELLE)
+  total        Float
+  note         String?
+  items        OrderItem[]
+  customerId   Int?
+  customer     Customer?   @relation(fields: [customerId], references: [id])
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model OrderItem {
+  id          Int     @id @default(autoincrement())
+  orderId     Int
+  productId   Int
+  productName String
+  quantity    Int
+  unitPrice   Float
+  supplements Json
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product @relation(fields: [productId], references: [id])
+}
+
+model HeroSlide {
+  id        Int      @id @default(autoincrement())
+  title     String
+  subtitle  String?
+  image     String?
+  ctaText   String?
+  ctaLink   String?
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model OpeningHours {
+  id        Int       @id @default(autoincrement())
+  day       DayOfWeek
+  isOpen    Boolean   @default(true)
+  openTime  String?
+  closeTime String?
+  note      String?
+
+  @@unique([day])
+}
+
+model SiteSetting {
+  key   String @id
+  value String
+}
+
+enum DayOfWeek {
+  LUNDI
+  MARDI
+  MERCREDI
+  JEUDI
+  VENDREDI
+  SAMEDI
+  DIMANCHE
+}
+
+enum OrderMode {
+  SUR_PLACE
+  RETRAIT
+  LIVRAISON
+}
+
+enum OrderStatus {
+  NOUVELLE
+  CONFIRMEE
+  PRETE
+  LIVREE
+  ANNULEE
+}

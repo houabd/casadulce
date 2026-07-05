@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  /* Sage */
+  --color-sage-50: #f4f6f1;
+  --color-sage-100: #e5ebe0;
+  --color-sage-200: #ccd8c4;
+  --color-sage-300: #a9bda0;
+  --color-sage-400: #8B9B7A;
+  --color-sage-500: #6e7f5e;
+  --color-sage-600: #57654b;
+  --color-sage-700: #44503b;
+  --color-sage-800: #374030;
+  --color-sage-900: #2e3628;
+
+  /* Gold */
+  --color-gold-300: #e8c97a;
+  --color-gold-400: #D4A843;
+  --color-gold-500: #C9A84C;
+  --color-gold-600: #a8883a;
+  --color-gold-700: #8a6e2e;
+
+  /* Cream */
+  --color-cream-50: #fdfcf8;
+  --color-cream-100: #faf7f0;
+  --color-cream-200: #f5efe0;
+
+  /* Fonts */
+  --font-cormorant: "Cormorant Garamond", Georgia, serif;
+  --font-inter: "Inter", Arial, sans-serif;
+}
+
+:root {
+  --background: #fdfcf8;
+  --foreground: #1f2937;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(1rem) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 0.25s ease-out forwards;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}

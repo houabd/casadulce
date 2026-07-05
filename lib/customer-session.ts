@@ -20,7 +20,13 @@ function secret() {
 export async function signCustomerToken(
   session: CustomerSession
 ): Promise<string> {
-  return new SignJWT(session as Record<string, unknown>)
+  const payload: Record<string, unknown> = {
+    id: session.id,
+    name: session.name,
+    email: session.email,
+    phone: session.phone,
+  };
+  return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime("30d")
     .sign(secret());

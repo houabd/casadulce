@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
 import Input from "@/components/ui/Input";
+import PasswordInput from "@/components/ui/PasswordInput";
 import Button from "@/components/ui/Button";
 
 const schema = z.object({
@@ -67,9 +68,8 @@ export default function LoginForm() {
             error={errors.email?.message}
             {...register("email")}
           />
-          <Input
+          <PasswordInput
             label="Mot de passe"
-            type="password"
             required
             error={errors.password?.message}
             {...register("password")}
